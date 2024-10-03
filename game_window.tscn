@@ -23,9 +23,9 @@ offset = 64
 
 [node name="ModifyMode" type="CheckButton" parent="."]
 offset_left = 896.0
-offset_top = 160.0
+offset_top = 224.0
 offset_right = 1046.0
-offset_bottom = 191.0
+offset_bottom = 255.0
 text = "Modify Mode"
 script = ExtResource("2_j6bwb")
 
@@ -35,6 +35,40 @@ one_shot = true
 
 [node name="CollapseTimer" type="Timer" parent="."]
 wait_time = 0.5
+one_shot = true
+
+[node name="RestoreTemplateButton" type="Button" parent="."]
+offset_left = 896.0
+offset_top = 144.0
+offset_right = 1024.0
+offset_bottom = 175.0
+size_flags_horizontal = 0
+text = "Restore"
+
+[node name="SaveTemplateButton" type="Button" parent="."]
+offset_left = 896.0
+offset_top = 96.0
+offset_right = 1024.0
+offset_bottom = 127.0
+text = "Save"
+
+[node name="StartButton" type="Button" parent="."]
+offset_left = 896.0
+offset_top = 48.0
+offset_right = 1024.0
+offset_bottom = 79.0
+text = "Start"
+
+[node name="ResetButton" type="Button" parent="."]
+offset_left = 896.0
+offset_top = 192.0
+offset_right = 1024.0
+offset_bottom = 223.0
+text = "Reset"
 
 [connection signal="timeout" from="DestroyTimer" to="Grid" method="_on_destroy_timer_timeout"]
 [connection signal="timeout" from="CollapseTimer" to="Grid" method="_on_collapse_timer_timeout"]
+[connection signal="pressed" from="RestoreTemplateButton" to="Grid" method="_on_restore_template_button_pressed"]
+[connection signal="pressed" from="SaveTemplateButton" to="Grid" method="_on_save_template_button_pressed"]
+[connection signal="pressed" from="StartButton" to="Grid" method="_on_start_button_pressed"]
+[connection signal="pressed" from="ResetButton" to="Grid" method="_on_reset_button_pressed"]
