@@ -1,10 +1,15 @@
 extends CheckButton
 
+@export var is_modified_mode: bool = false
+@export var chosen_color: String = ""
+
 var colors = ["Blue", "Green", "Light Green", "Orange", "Pink", "Yellow"]
 var change_colors: Array = []
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	self.connect("toggled", _on_modify_mode_toggled)
+
 	for color in colors:
 		var change_color = TextureButton.new()
 		var piece_path = "res://img/Match 3 Assets/Match 3 Assets/Pieces/" + color + " Piece.png"
@@ -18,7 +23,7 @@ func _ready() -> void:
 		# customize a parameter for the button
 		change_color.set_meta("color", color)
 
-		change_color.connect("pressed", _on_change_color_pressed)
+		change_color.pressed.connect(_on_change_color_toggled.bind(change_color))
 
 		add_child(change_color)
 
@@ -30,16 +35,18 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	pass
 
-func _on_change_color_pressed():
-	# print(self.get_meta("color"))
-	print(self.get_meta_list()
+func _on_change_color_toggled(button: TextureButton) -> void:
+	if button.button_pressed:
+		print(button.get_meta("color"))
+		chosen_color = button.get_meta("color")
 
-func get_color():
-	for change_color in change_colors:
-		if change_color.pressed:
-			return colors[change_colors.find(change_color)]
-	return null
+		# unpress all other buttons
+		for change_color in change_colors:
+			if change_color != button:
+				change_color.button_pressed = false
+	else:
+		chosen_color = ""
 
-
-func _on_collapse_timer_timeout() -> void:
-	pass # Replace with function body.
+func _on_modify_mode_toggled(button: bool) -> void:
+	is_modified_mode = button
+	print("is_modified_mode: ", is_modified_mode)
