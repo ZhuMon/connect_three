@@ -7,14 +7,6 @@ extends Node2D
 @export var y_start: int;
 @export var offset: int;
 
-var possible_pieces = [
-	preload("res://pieces/blue_piece.tscn"),
-	preload("res://pieces/green_piece.tscn"),
-	preload("res://pieces/light_green_piece.tscn"),
-	preload("res://pieces/orange_piece.tscn"),
-	preload("res://pieces/pink_piece.tscn"),
-	preload("res://pieces/yellow_piece.tscn"),
-]
 var piece_images = {
 	"Blue": load("res://img/Match 3 Assets/Match 3 Assets/Pieces/Blue Piece.png"),
 	"Green": load("res://img/Match 3 Assets/Match 3 Assets/Pieces/Green Piece.png"),
@@ -26,6 +18,7 @@ var piece_images = {
 }
 var concrete_piece = preload("res://pieces/concrete_piece.tscn")
 var all_pieces = [];
+var saved_pieces = [];
 var not_matchable = ["Concrete", ""]
 
 # Record the chosen piece
@@ -131,6 +124,9 @@ func change_color():
 	if modified_mode == null:
 		return
 
+	if !controlling:
+		return
+
 	if !modified_mode.is_modified_mode:
 		return
 
@@ -209,3 +205,49 @@ func _on_destroy_timer_timeout() -> void:
 
 func _on_collapse_timer_timeout() -> void:
 	collapse_pieces()
+
+func _on_start_button_pressed() -> void:
+	# lock the modify mode
+	var modify_mode = get_node("/root/GameWindow/ModifyMode")
+	modify_mode.is_modified_mode = false
+	modify_mode.button_pressed = false
+
+	for column in width:
+		for row in height:
+			if all_pieces[column][row].color == "Concrete":
+				all_pieces[column][row].queue_free()
+				all_pieces[column][row] = null
+
+
+func _on_save_template_button_pressed() -> void:
+	saved_pieces = []
+	for column in width:
+		saved_pieces.append([])
+		for row in height:
+			if all_pieces[column][row] != null:
+				saved_pieces.append(all_pieces[column][row].color)
+
+func _on_restore_template_button_pressed() -> void:
+	for column in width:
+		for row in height:
+			if all_pieces[column][row] != null:
+				all_pieces[column][row].queue_free()
+	
+	for column in width:
+		for row in height:
+			if saved_pieces[column][row] != null:
+				var new_piece = concrete_piece.instantiate()
+				new_piece.color = saved_pieces[column][row]
+				new_piece.texture = piece_images[saved_pieces[column][row]]
+				new_piece.position = grid_to_pixel(column, row)
+				all_pieces[column][row] = new_piece
+				add_child(new_piece)
+
+	
+func _on_reset_button_pressed() -> void:
+	for column in width:
+		for row in height:
+			if all_pieces[column][row] != null:
+				all_pieces[column][row].queue_free()
+
+	spawn_pieces()
