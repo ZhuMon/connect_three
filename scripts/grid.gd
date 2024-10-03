@@ -22,6 +22,7 @@ var piece_images = {
 	"Orange": load("res://img/Match 3 Assets/Match 3 Assets/Pieces/Orange Piece.png"),
 	"Pink": load("res://img/Match 3 Assets/Match 3 Assets/Pieces/Pink Piece.png"),
 	"Yellow": load("res://img/Match 3 Assets/Match 3 Assets/Pieces/Yellow Piece.png"),
+	"Concrete": load("res://img/Match 3 Assets/Match 3 Assets/Obstacles/Concrete.png"),
 }
 var concrete_piece = preload("res://pieces/concrete_piece.tscn")
 var all_pieces = [];
@@ -147,6 +148,8 @@ func change_color():
 	var node = piece.get_node("Sprite2D")
 	node.texture = piece_images[chosen_color]
 
+	print("change ", first_choose, " to color: ", chosen_color)
+
 func find_matches() -> Array:
 	var matches = []
 	for column in range(width):
@@ -155,16 +158,18 @@ func find_matches() -> Array:
 				var current_color = all_pieces[column][row].color
 				if current_color in not_matchable:
 					continue
-				if all_pieces[column - 1][row] != null && all_pieces[column + 1][row] != null:
-					if all_pieces[column - 1][row].color == current_color && all_pieces[column + 1][row].color == current_color:
-						matches.append(Vector2(column - 1, row))
-						matches.append(Vector2(column, row))
-						matches.append(Vector2(column + 1, row))
-				if all_pieces[column][row - 1] != null && all_pieces[column][row + 1] != null:
-					if all_pieces[column][row - 1].color == current_color && all_pieces[column][row + 1].color == current_color:
-						matches.append(Vector2(column, row - 1))
-						matches.append(Vector2(column, row))
-						matches.append(Vector2(column, row + 1))
+				if column > 0 and column < width - 1:
+					if all_pieces[column - 1][row] != null && all_pieces[column + 1][row] != null:
+						if all_pieces[column - 1][row].color == current_color && all_pieces[column + 1][row].color == current_color:
+							matches.append(Vector2(column - 1, row))
+							matches.append(Vector2(column, row))
+							matches.append(Vector2(column + 1, row))
+				if row > 0 and row < height - 1:
+					if all_pieces[column][row - 1] != null && all_pieces[column][row + 1] != null:
+						if all_pieces[column][row - 1].color == current_color && all_pieces[column][row + 1].color == current_color:
+							matches.append(Vector2(column, row - 1))
+							matches.append(Vector2(column, row))
+							matches.append(Vector2(column, row + 1))
 	return matches
 
 func mark_matched_and_dim(column, row):
