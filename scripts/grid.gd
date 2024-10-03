@@ -182,7 +182,7 @@ func destroy_matches():
 			if all_pieces[column][row] != null and all_pieces[column][row].color != "" and all_pieces[column][row].matched:
 				all_pieces[column][row].queue_free()
 
-	# collapse_pieces()
+	# collapse pieces
 	get_parent().get_node("CollapseTimer").start()
 
 func collapse_pieces():
@@ -196,6 +196,13 @@ func collapse_pieces():
 						all_pieces[column][i] = null
 						all_pieces[column][row].move(grid_to_pixel(column, row))
 						break
+	
+	# check if there are still matches
+	var matches = find_matches()
+	if len(matches) > 0:
+		for match in matches:
+			mark_matched_and_dim(match.x, match.y)
+		get_parent().get_node("DestroyTimer").start()
 
 func _on_destroy_timer_timeout() -> void:
 	destroy_matches()
