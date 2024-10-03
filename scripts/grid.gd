@@ -29,6 +29,7 @@ var controlling = false
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	all_pieces = make_2d_array()
+	saved_pieces = make_2d_array()
 	spawn_pieces()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -49,6 +50,7 @@ func spawn_pieces():
 			var empty_piece = concrete_piece.instantiate()
 			add_child(empty_piece);
 			empty_piece.position = grid_to_pixel(i, j)
+			empty_piece.color = "Concrete"
 			all_pieces[i][j] = empty_piece
 
 func grid_to_pixel(column, row):
@@ -214,18 +216,24 @@ func _on_start_button_pressed() -> void:
 
 	for column in width:
 		for row in height:
-			if all_pieces[column][row].color == "Concrete":
-				all_pieces[column][row].queue_free()
-				all_pieces[column][row] = null
+			if all_pieces[column][row] != null:
+				all_pieces[column][row].matched = false
+				all_pieces[column][row].modulate = Color(1, 1, 1, 1)
+				if all_pieces[column][row].color == "Concrete":
+					all_pieces[column][row].queue_free()
+					all_pieces[column][row] = null
+
+	get_parent().get_node("CollapseTimer").start()
 
 
 func _on_save_template_button_pressed() -> void:
-	saved_pieces = []
+	saved_pieces = make_2d_array()
 	for column in width:
-		saved_pieces.append([])
 		for row in height:
 			if all_pieces[column][row] != null:
-				saved_pieces.append(all_pieces[column][row].color)
+				saved_pieces[column][row] = all_pieces[column][row].color
+			else:
+				saved_pieces[column][row] = "Concrete"
 
 func _on_restore_template_button_pressed() -> void:
 	for column in width:
@@ -235,11 +243,15 @@ func _on_restore_template_button_pressed() -> void:
 	
 	for column in width:
 		for row in height:
-			if saved_pieces[column][row] != null:
+			var saved_color = saved_pieces[column][row]
+			if saved_color != null:
 				var new_piece = concrete_piece.instantiate()
-				new_piece.color = saved_pieces[column][row]
-				new_piece.texture = piece_images[saved_pieces[column][row]]
+				new_piece.color = saved_color
 				new_piece.position = grid_to_pixel(column, row)
+
+				var node = new_piece.get_node("Sprite2D")
+				node.texture = piece_images[saved_color]
+
 				all_pieces[column][row] = new_piece
 				add_child(new_piece)
 
