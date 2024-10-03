@@ -28,8 +28,6 @@ offset_right = 1046.0
 offset_bottom = 191.0
 text = "Modify Mode"
 script = ExtResource("2_j6bwb")
-is_modified_mode = null
-chosen_color = null
 
 [node name="DestroyTimer" type="Timer" parent="."]
 wait_time = 0.5

@@ -15,7 +15,6 @@ var possible_pieces = [
 	preload("res://pieces/pink_piece.tscn"),
 	preload("res://pieces/yellow_piece.tscn"),
 ]
-var blue_piece = load("res://img/Match 3 Assets/Match 3 Assets/Pieces/Blue Piece.png")
 var piece_images = {
 	"Blue": load("res://img/Match 3 Assets/Match 3 Assets/Pieces/Blue Piece.png"),
 	"Green": load("res://img/Match 3 Assets/Match 3 Assets/Pieces/Green Piece.png"),
@@ -57,11 +56,6 @@ func spawn_pieces():
 			add_child(empty_piece);
 			empty_piece.position = grid_to_pixel(i, j)
 			all_pieces[i][j] = empty_piece
-
-	var piece = all_pieces[2][2]
-	var node = piece.get_node("Sprite2D")
-
-	node.texture = blue_piece
 
 func grid_to_pixel(column, row):
 	var new_x = x_start + offset * column;
@@ -161,18 +155,16 @@ func find_matches() -> Array:
 				var current_color = all_pieces[column][row].color
 				if current_color in not_matchable:
 					continue
-				if column > 0 && column < width - 1:
-					if all_pieces[column - 1][row] != null && all_pieces[column + 1][row] != null:
-						if all_pieces[column - 1][row].color == current_color && all_pieces[column + 1][row].color == current_color:
-							matches.append(Vector2(column - 1, row))
-							matches.append(Vector2(column, row))
-							matches.append(Vector2(column + 1, row))
-				if row > 0 && row < height - 1:
-					if all_pieces[column][row - 1] != null && all_pieces[column][row + 1] != null:
-						if all_pieces[column][row - 1].color == current_color && all_pieces[column][row + 1].color == current_color:
-							matches.append(Vector2(column, row - 1))
-							matches.append(Vector2(column, row))
-							matches.append(Vector2(column, row + 1))
+				if all_pieces[column - 1][row] != null && all_pieces[column + 1][row] != null:
+					if all_pieces[column - 1][row].color == current_color && all_pieces[column + 1][row].color == current_color:
+						matches.append(Vector2(column - 1, row))
+						matches.append(Vector2(column, row))
+						matches.append(Vector2(column + 1, row))
+				if all_pieces[column][row - 1] != null && all_pieces[column][row + 1] != null:
+					if all_pieces[column][row - 1].color == current_color && all_pieces[column][row + 1].color == current_color:
+						matches.append(Vector2(column, row - 1))
+						matches.append(Vector2(column, row))
+						matches.append(Vector2(column, row + 1))
 	return matches
 
 func mark_matched_and_dim(column, row):
@@ -184,11 +176,12 @@ func destroy_matches():
 		for row in height:
 			if all_pieces[column][row] != null and all_pieces[column][row].color != "" and all_pieces[column][row].matched:
 				all_pieces[column][row].queue_free()
-	
+
 	# collapse_pieces()
 	get_parent().get_node("CollapseTimer").start()
 
 func collapse_pieces():
+	print("collapse_pieces")
 	for column in width:
 		for row in height:
 			if all_pieces[column][row] == null:
@@ -200,7 +193,7 @@ func collapse_pieces():
 						break
 
 func _on_destroy_timer_timeout() -> void:
-	destroy_matches()	
+	destroy_matches()
 
 func _on_collapse_timer_timeout() -> void:
 	collapse_pieces()
