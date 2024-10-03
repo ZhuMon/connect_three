@@ -1,0 +1,41 @@
+[gd_scene load_steps=3 format=3 uid="uid://d1fotyw7g14af"]
+
+[ext_resource type="Script" path="res://scripts/grid.gd" id="1_m67tj"]
+[ext_resource type="Script" path="res://scripts/modify_mode.gd" id="2_j6bwb"]
+
+[node name="GameWindow" type="Node2D"]
+
+[node name="Background" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.372753, 0.595015, 0.669479, 1)
+
+[node name="Grid" type="Node2D" parent="."]
+script = ExtResource("1_m67tj")
+width = 10
+height = 9
+x_start = 128
+y_start = 600
+offset = 64
+
+[node name="ModifyMode" type="CheckButton" parent="."]
+offset_left = 896.0
+offset_top = 160.0
+offset_right = 1046.0
+offset_bottom = 191.0
+text = "Modify Mode"
+script = ExtResource("2_j6bwb")
+is_modified_mode = null
+chosen_color = null
+
+[node name="DestroyTimer" type="Timer" parent="."]
+wait_time = 0.5
+one_shot = true
+
+[node name="CollapseTimer" type="Timer" parent="."]
+
+[connection signal="timeout" from="DestroyTimer" to="Grid" method="_on_destroy_timer_timeout"]
+[connection signal="timeout" from="CollapseTimer" to="ModifyMode" method="_on_collapse_timer_timeout"]
