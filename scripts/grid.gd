@@ -17,9 +17,10 @@ var piece_images = {
 	"Concrete": load("res://img/Match 3 Assets/Match 3 Assets/Obstacles/Concrete.png"),
 }
 var concrete_piece = preload("res://pieces/concrete_piece.tscn")
-var all_pieces = [];
-var saved_pieces = [];
+var all_pieces = []
+var saved_pieces = [] # initial map
 var not_matchable = ["Concrete", ""]
+var history_pieces = []
 
 # Record the chosen piece
 var first_choose = Vector2(0,0)

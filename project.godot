@@ -15,6 +15,10 @@ run/main_scene="res://game_window.tscn"
 config/features=PackedStringArray("4.3", "Mobile")
 config/icon="res://icon.svg"
 
+[display]
+
+window/stretch/mode="canvas_items"
+
 [input]
 
 left_mouse={
@@ -26,3 +30,4 @@ left_mouse={
 [rendering]
 
 renderer/rendering_method="mobile"
+textures/vram_compression/import_etc2_astc=true
