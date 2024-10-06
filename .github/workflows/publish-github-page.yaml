@@ -41,8 +41,8 @@ jobs:
           mkdir -p ${template_folder}
           mv templates/web_debug.zip ${template_folder}
           mv templates/web_release.zip ${template_folder}
-          mv templates/templates/web_nothreads_debug.zip ${template_folder}
-          mv templates/templates/web_nothreads_release.zip ${template_folder}
+          mv templates/web_nothreads_debug.zip ${template_folder}
+          mv templates/web_nothreads_release.zip ${template_folder}
 
       - name: Export projects
         run: |
