@@ -37,9 +37,12 @@ jobs:
         run: |
           wget https://github.com/godotengine/godot/releases/download/4.3-stable/Godot_v4.3-stable_export_templates.tpz -q -O templates.zip
           unzip templates.zip
-          mkdir -p /home/runner/.local/share/godot/export_templates/4.3.stable/
-          mv templates/web_debug.zip /home/runner/.local/share/godot/export_templates/4.3.stable/
-          mv templates/web_release.zip /home/runner/.local/share/godot/export_templates/4.3.stable/
+          template_folder="/home/runner/.local/share/godot/export_templates/4.3.stable/"
+          mkdir -p ${template_folder}
+          mv templates/web_debug.zip ${template_folder}
+          mv templates/web_release.zip ${template_folder}
+          mv templates/templates/web_nothreads_debug.zip ${template_folder}
+          mv templates/templates/web_nothreads_release.zip ${template_folder}
 
       - name: Export projects
         run: |
