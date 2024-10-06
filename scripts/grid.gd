@@ -16,7 +16,7 @@ var piece_images = {
 	"Yellow": load("res://img/Match 3 Assets/Match 3 Assets/Pieces/Yellow Piece.png"),
 	"Concrete": load("res://img/Match 3 Assets/Match 3 Assets/Obstacles/Concrete.png"),
 }
-var concrete_piece = preload("res://pieces/concrete_piece.tscn")
+var concrete_piece = preload("res://scenes/pieces/concrete_piece.tscn")
 var all_pieces = []
 var saved_pieces = [] # initial map
 var not_matchable = ["Concrete", ""]
@@ -195,7 +195,7 @@ func collapse_pieces():
 						all_pieces[column][i] = null
 						all_pieces[column][row].move(grid_to_pixel(column, row))
 						break
-	
+
 	# check if there are still matches
 	var matches = find_matches()
 	if len(matches) > 0:
@@ -241,7 +241,7 @@ func _on_restore_template_button_pressed() -> void:
 		for row in height:
 			if all_pieces[column][row] != null:
 				all_pieces[column][row].queue_free()
-	
+
 	for column in width:
 		for row in height:
 			var saved_color = saved_pieces[column][row]
@@ -256,7 +256,7 @@ func _on_restore_template_button_pressed() -> void:
 				all_pieces[column][row] = new_piece
 				add_child(new_piece)
 
-	
+
 func _on_reset_button_pressed() -> void:
 	for column in width:
 		for row in height:
