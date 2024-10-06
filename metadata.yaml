@@ -1,0 +1,10 @@
+github:
+  description: Connect-3, a game let you customize your own 3-in-a-row game.
+  enable_discussions: false
+  enable_issues: true
+  enable_projects: false
+  enable_wiki: false
+  homepage: https://zhumon.github.io/connect3
+  template: false
+  topics:
+    - godot
