@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://cdvqgfqv475gf"]
 
-[ext_resource type="PackedScene" uid="uid://b5fssa31oyifr" path="res://pieces/piece.tscn" id="1_ljd1e"]
+[ext_resource type="PackedScene" uid="uid://b5fssa31oyifr" path="res://scenes/pieces/piece.tscn" id="1_ljd1e"]
 [ext_resource type="Texture2D" uid="uid://dwyvrbjcggm20" path="res://img/Match 3 Assets/Match 3 Assets/Pieces/Blue Piece.png" id="1_q5aat"]
 
 [node name="BluePiece" instance=ExtResource("1_ljd1e")]
