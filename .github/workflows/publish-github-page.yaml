@@ -60,6 +60,8 @@ jobs:
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
+        env:
+          INPUT_PATH: outputs/web/
 
   # Deployment job
   deploy:
