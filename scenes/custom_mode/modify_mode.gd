@@ -1,6 +1,7 @@
-extends CheckButton
+extends Control
 
-@export var is_modified_mode: bool = false
+signal chosen_color_changed(chosen_color: String)
+
 @export var chosen_color: String = ""
 
 var colors = ["Blue", "Green", "Light Green", "Orange", "Pink", "Yellow"]
@@ -8,8 +9,6 @@ var change_colors: Array = []
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	self.connect("toggled", _on_modify_mode_toggled)
-
 	for color in colors:
 		var change_color = TextureButton.new()
 		var piece_path = "res://img/Match 3 Assets/Match 3 Assets/Pieces/" + color + " Piece.png"
@@ -44,9 +43,9 @@ func _on_change_color_toggled(button: TextureButton) -> void:
 		for change_color in change_colors:
 			if change_color != button:
 				change_color.button_pressed = false
+
 	else:
 		chosen_color = ""
+		print("clean chosen color")
 
-func _on_modify_mode_toggled(button: bool) -> void:
-	is_modified_mode = button
-	print("is_modified_mode: ", is_modified_mode)
+	emit_signal("chosen_color_changed", chosen_color)

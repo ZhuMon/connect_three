@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://b5fssa31oyifr"]
 
-[ext_resource type="Script" path="res://scripts/piece.gd" id="1_sooyl"]
+[ext_resource type="Script" path="res://scenes/pieces/piece.gd" id="1_sooyl"]
 
 [sub_resource type="GDScript" id="GDScript_cjdqp"]
 script/source = "extends Sprite2D
