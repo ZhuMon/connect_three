@@ -94,7 +94,7 @@ func swap_pieces(column, row, direction):
     var first_piece = all_pieces[column][row]
     var other_piece = all_pieces[column + direction.x][row+direction.y]
 
-    if first_piece == null or other_piece == null:
+    if not is_instance_valid(first_piece) or not is_instance_valid(other_piece):
         return
     if first_piece.color in not_matchable or other_piece.color in not_matchable:
         return

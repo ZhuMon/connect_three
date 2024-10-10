@@ -12,7 +12,10 @@ func _ready() -> void:
     add_child(grid_scene_instance)
 
     modify_mode_instance = get_node("ModifyMode")
-    modify_mode_instance.chosen_color_changed.connect(grid_scene_instance._on_chosen_color_changed)
+    if modify_mode_instance:
+        modify_mode_instance.chosen_color_changed.connect(grid_scene_instance._on_chosen_color_changed)
+    else:
+        print("ModifyMode not found")
     
 
 
