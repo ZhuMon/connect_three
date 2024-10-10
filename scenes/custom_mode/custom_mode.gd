@@ -10,6 +10,7 @@ func _ready() -> void:
     grid_scene_instance.position = Vector2(0, 0)
 
     add_child(grid_scene_instance)
+    grid_scene_instance.spawn_all_concrete_pieces()
 
     modify_mode_instance = get_node("ModifyMode")
     if modify_mode_instance:

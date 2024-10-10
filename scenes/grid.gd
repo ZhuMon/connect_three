@@ -30,13 +30,12 @@ var controlling = false
 var is_started = false
 var color_to_change = ""
 
+var is_in_editor = OS.has_feature("editor")
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
     all_pieces = make_2d_array()
-    # get_tree().get_root().get_node("StartButton").hide()
-
     saved_pieces = make_2d_array()
-    spawn_all_concrete_pieces()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -58,6 +57,31 @@ func spawn_all_concrete_pieces():
             empty_piece.position = grid_to_pixel(i, j)
             empty_piece.color = "Concrete"
             all_pieces[i][j] = empty_piece
+
+func spawn_level_pieces(level_info: Array):
+    var level_width = level_info.size()
+    var level_height = level_info[0].size()
+    if level_width != width or level_height != height:
+        print("level width or height not match")
+        return
+    
+    for i in width:
+        for j in height:
+            var color = level_info[i][j]
+            if color != "":
+                var new_piece = concrete_piece.instantiate()
+                new_piece.color = color
+                new_piece.position = grid_to_pixel(i, j)
+
+                var node = new_piece.get_node("Sprite2D")
+                if !color in piece_images:
+                    print("color not in piece_images: ", color)
+                    return
+
+                node.texture = piece_images[color]
+
+                all_pieces[i][j] = new_piece
+                add_child(new_piece)
 
 func grid_to_pixel(column, row):
     var new_x = x_start + offset * column;
@@ -228,10 +252,43 @@ func clean_concrete_pieces():
                 all_pieces[column][row] = null
     get_node("CollapseTimer").start()
 
+func rotate_90_clockwise(array):
+    var rows = array.size()
+    var cols = array[0].size()
+    var rotated = []
+    
+    for i in range(cols):
+        rotated.append([])
+    
+    for i in range(cols):
+        for j in range(rows):
+            if array[j][i] == "Concrete":
+                rotated[i].append("")
+            else:
+                rotated[i].append(array[rows - 1 - j][i])
+    
+    return rotated
 
+func rotate_90_counterclockwise(array):
+    var rows = array.size()
+    var cols = array[0].size()
+    var rotated = []
+    
+    for i in range(cols):
+        rotated.append([])
+    
+    for i in range(cols):
+        for j in range(rows):
+            if array[j][i] == "Concrete":
+                rotated[cols - 1 - i].append("")
+            else:
+                rotated[cols - 1 - i].append(array[j][i])
+    
+    return rotated
 
 func save_template():
     saved_pieces = make_2d_array()
+
     for column in width:
         for row in height:
             if all_pieces[column][row] != null:
@@ -239,6 +296,36 @@ func save_template():
             else:
                 saved_pieces[column][row] = "Concrete"
 
+
+    # if debug mode is on
+    if is_in_editor:
+        var rotated_pieces = rotate_90_counterclockwise(saved_pieces)
+
+        var file = FileAccess.open("user://saved_level.csv", FileAccess.WRITE)
+
+        for row in rotated_pieces:
+            file.store_csv_line(row)
+        file.close()
+        print("saved to user://saved_level.csv")
+
+func get_level_info_from_file(file_name: String):
+    var file = FileAccess.open("res://levels/" + file_name, FileAccess.READ)
+    if !file:
+        print("error: file not found")
+        return
+
+    var level_info = []
+    while !file.eof_reached():
+        var row = file.get_csv_line()
+        if row.size() == 1:
+            continue
+        level_info.append(row)
+        
+    file.close()
+
+    level_info = rotate_90_clockwise(level_info)
+
+    return level_info
 
 func restore_template():
     free_all_pieces()
