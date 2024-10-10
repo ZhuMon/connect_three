@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://ya7isqlca3db"]
 
-[ext_resource type="Script" path="res://scripts/init_window.gd" id="1_h03y6"]
+[ext_resource type="Script" path="res://scenes/init_window.gd" id="1_h03y6"]
 [ext_resource type="FontFile" uid="uid://cu7sg8k72fv2a" path="res://assets/fonts/Kenney Pixel.ttf" id="2_st8dp"]
 
 [node name="InitWindow" type="Node2D"]

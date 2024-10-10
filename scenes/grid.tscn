@@ -1,0 +1,17 @@
+[gd_scene load_steps=2 format=3 uid="uid://diy4iob5i2734"]
+
+[ext_resource type="Script" path="res://scenes/grid.gd" id="1_stt6u"]
+
+[node name="Grid" type="Node2D"]
+script = ExtResource("1_stt6u")
+
+[node name="DestroyTimer" type="Timer" parent="."]
+wait_time = 0.5
+one_shot = true
+
+[node name="CollapseTimer" type="Timer" parent="."]
+wait_time = 0.5
+one_shot = true
+
+[connection signal="timeout" from="DestroyTimer" to="." method="_on_destroy_timer_timeout"]
+[connection signal="timeout" from="CollapseTimer" to="." method="_on_collapse_timer_timeout"]
