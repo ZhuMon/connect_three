@@ -1,7 +1,6 @@
 extends Node2D
 
 var level_button = preload("res://scenes/level_mode/level_button.tscn")
-var grid_scene = preload("res://scenes/grid.tscn")
 
 var start_x = 32
 var start_y = 32
@@ -46,22 +45,12 @@ func _ready() -> void:
         file_name = dir.get_next()
     
 
-
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
     pass
 
 func _on_level_button_pressed(level_file_path: String) -> void:
-    # clean all buttons
-    for level_button_instance in level_button_instances:
-        level_button_instance.queue_free()
-
-    # load the level
-    var grid_scene_instance = grid_scene.instantiate()
-    grid_scene_instance.position = Vector2(0, 0)
-
-    add_child(grid_scene_instance)
-
-    level_info = grid_scene_instance.get_level_info_from_file(level_file_path)
-
-    grid_scene_instance.spawn_level_pieces(level_info)
+    var args = {
+        "level_file_path": level_file_path
+    }
+    Global.goto_scene("level_window", args)

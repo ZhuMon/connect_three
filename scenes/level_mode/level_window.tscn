@@ -1,0 +1,36 @@
+[gd_scene load_steps=2 format=3 uid="uid://dh0lm2fkn7k02"]
+
+[ext_resource type="Script" path="res://scenes/level_mode/level_window.gd" id="1_uxgrj"]
+
+[node name="LevelWindow" type="Node2D"]
+script = ExtResource("1_uxgrj")
+
+[node name="Background" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 896.0
+offset_top = 96.0
+offset_right = 896.0
+offset_bottom = 96.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.372753, 0.595015, 0.669479, 1)
+
+[node name="RestartButton" type="Button" parent="."]
+offset_left = 896.0
+offset_top = 48.0
+offset_right = 1024.0
+offset_bottom = 79.0
+text = "Restart"
+
+[node name="MenuButton" type="Button" parent="."]
+offset_left = 896.0
+offset_top = 96.0
+offset_right = 1024.0
+offset_bottom = 127.0
+text = "Menu
+"
+
+[connection signal="pressed" from="RestartButton" to="." method="_on_restart_button_pressed"]
+[connection signal="pressed" from="MenuButton" to="." method="_on_menu_button_pressed"]

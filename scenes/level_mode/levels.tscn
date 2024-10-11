@@ -1,9 +1,9 @@
 [gd_scene load_steps=2 format=3 uid="uid://cy7n78hnegn7l"]
 
-[ext_resource type="Script" path="res://scenes/level_mode/level_mode.gd" id="1_14awl"]
+[ext_resource type="Script" path="res://scenes/level_mode/levels.gd" id="1_635k7"]
 
-[node name="LevelMode" type="Node2D"]
-script = ExtResource("1_14awl")
+[node name="Levels" type="Node2D"]
+script = ExtResource("1_635k7")
 
 [node name="Background" type="ColorRect" parent="."]
 anchors_preset = 15
