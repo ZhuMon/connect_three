@@ -48,4 +48,5 @@ offset_bottom = 291.0
 theme_override_font_sizes/font_size = 125
 text = "Connect Three"
 
+[connection signal="pressed" from="StartButton" to="." method="_on_start_button_pressed"]
 [connection signal="pressed" from="CustomButton" to="." method="_on_custom_button_pressed"]

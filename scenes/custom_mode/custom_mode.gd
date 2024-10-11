@@ -10,6 +10,7 @@ func _ready() -> void:
     grid_scene_instance.position = Vector2(0, 0)
 
     add_child(grid_scene_instance)
+    grid_scene_instance.spawn_all_concrete_pieces()
 
     modify_mode_instance = get_node("ModifyMode")
     if modify_mode_instance:
@@ -34,6 +35,8 @@ func _on_save_template_button_pressed() -> void:
 func _on_restore_template_button_pressed() -> void:
     grid_scene_instance.restore_template()
 
-
 func _on_reset_button_pressed() -> void:
     grid_scene_instance.reset()
+
+func _on_menu_button_pressed() -> void:
+    Global.goto_scene("menu", {})

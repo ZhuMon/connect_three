@@ -13,7 +13,7 @@ config_version=5
 config/name="connect_three"
 run/main_scene="res://scenes/init_window.tscn"
 config/features=PackedStringArray("4.3", "Mobile")
-config/icon="res://icon.svg"
+config/icon="res://img/Match 3 Assets/Match 3 Assets/Pieces/Blue Piece.png"
 
 [autoload]
 
