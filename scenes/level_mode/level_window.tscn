@@ -1,6 +1,10 @@
-[gd_scene load_steps=2 format=3 uid="uid://dh0lm2fkn7k02"]
+[gd_scene load_steps=6 format=3 uid="uid://dh0lm2fkn7k02"]
 
 [ext_resource type="Script" path="res://scenes/level_mode/level_window.gd" id="1_uxgrj"]
+[ext_resource type="Texture2D" uid="uid://bw8038uifrhvu" path="res://img/Match 3 Assets/Match 3 Assets/UI/Buttons/Restart Button.png" id="2_8idp7"]
+[ext_resource type="Texture2D" uid="uid://ii4umdl8rw2d" path="res://img/Match 3 Assets/Match 3 Assets/UI/Buttons/Back Button.png" id="2_m4qe5"]
+[ext_resource type="Texture2D" uid="uid://wryc85km3h7l" path="res://img/Match 3 Assets/Match 3 Assets/UI/Buttons/Back Button 2.png" id="3_38kb2"]
+[ext_resource type="Texture2D" uid="uid://b2fmm36j2yjbj" path="res://img/transparant_restart.png" id="3_vlntj"]
 
 [node name="LevelWindow" type="Node2D"]
 script = ExtResource("1_uxgrj")
@@ -17,20 +21,32 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.372753, 0.595015, 0.669479, 1)
 
-[node name="RestartButton" type="Button" parent="."]
-offset_left = 896.0
+[node name="RestartButton" type="TextureButton" parent="."]
+offset_left = 904.0
 offset_top = 48.0
-offset_right = 1024.0
-offset_bottom = 79.0
-text = "Restart"
+offset_right = 1111.0
+offset_bottom = 253.0
+scale = Vector2(0.5, 0.5)
+texture_normal = ExtResource("2_8idp7")
+texture_pressed = ExtResource("3_vlntj")
 
 [node name="MenuButton" type="Button" parent="."]
 offset_left = 896.0
-offset_top = 96.0
+offset_top = 248.0
 offset_right = 1024.0
-offset_bottom = 127.0
+offset_bottom = 279.0
 text = "Menu
 "
 
+[node name="BackButton" type="TextureButton" parent="."]
+offset_left = 8.0
+offset_right = 520.0
+offset_bottom = 512.0
+scale = Vector2(0.15, 0.2)
+texture_normal = ExtResource("2_m4qe5")
+texture_pressed = ExtResource("3_38kb2")
+
 [connection signal="pressed" from="RestartButton" to="." method="_on_restart_button_pressed"]
 [connection signal="pressed" from="MenuButton" to="." method="_on_menu_button_pressed"]
+[connection signal="pressed" from="BackButton" to="." method="_on_menu_button_pressed"]
+[connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]

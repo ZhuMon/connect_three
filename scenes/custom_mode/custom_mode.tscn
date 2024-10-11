@@ -52,7 +52,16 @@ offset_right = 1024.0
 offset_bottom = 223.0
 text = "Reset"
 
+[node name="MenuButton" type="Button" parent="."]
+offset_left = 1024.0
+offset_top = 608.0
+offset_right = 1152.0
+offset_bottom = 639.0
+text = "Menu
+"
+
 [connection signal="pressed" from="RestoreTemplateButton" to="." method="_on_restore_template_button_pressed"]
 [connection signal="pressed" from="SaveTemplateButton" to="." method="_on_save_template_button_pressed"]
 [connection signal="pressed" from="StartButton" to="." method="_on_start_button_pressed"]
 [connection signal="pressed" from="ResetButton" to="." method="_on_reset_button_pressed"]
+[connection signal="pressed" from="MenuButton" to="." method="_on_menu_button_pressed"]

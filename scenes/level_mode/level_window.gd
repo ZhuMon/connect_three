@@ -29,4 +29,7 @@ func _on_restart_button_pressed() -> void:
     start()
 
 func _on_menu_button_pressed() -> void:
+    Global.goto_scene("menu", {})
+
+func _on_back_button_pressed() -> void:
     Global.goto_scene("levels", {})
