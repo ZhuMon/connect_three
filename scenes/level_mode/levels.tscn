@@ -12,3 +12,11 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.372753, 0.595015, 0.669479, 1)
+
+[node name="MenuButton" type="Button" parent="."]
+offset_left = 992.0
+offset_top = 584.0
+offset_right = 1120.0
+offset_bottom = 615.0
+text = "Menu
+"

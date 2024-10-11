@@ -55,3 +55,7 @@ func _on_level_button_pressed(level_file_path: String, level: int) -> void:
         "level": level
     }
     Global.goto_scene("level_window", args)
+
+
+func _on_menu_button_pressed() -> void:
+    Global.goto_scene("menu", {})
