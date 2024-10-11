@@ -38,7 +38,7 @@ func _ready() -> void:
             level_button_instance.level_file_name = file_name
             level_button_instance.level = int(level_name)
 
-            level_button_instance.pressed.connect(_on_level_button_pressed.bind(file_name))
+            level_button_instance.pressed.connect(_on_level_button_pressed.bind(file_name, int(level_name)))
             add_child(level_button_instance)
 
             level_button_instances.append(level_button_instance)
@@ -49,8 +49,9 @@ func _ready() -> void:
 func _process(delta: float) -> void:
     pass
 
-func _on_level_button_pressed(level_file_path: String) -> void:
+func _on_level_button_pressed(level_file_path: String, level: int) -> void:
     var args = {
-        "level_file_path": level_file_path
+        "level_file_path": level_file_path,
+        "level": level
     }
     Global.goto_scene("level_window", args)

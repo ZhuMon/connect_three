@@ -1,5 +1,7 @@
 extends Node2D
 
+signal pieces_cleaned
+
 # Grid Variables
 @export var width: int = 10;
 @export var height: int = 9;
@@ -233,6 +235,20 @@ func collapse_pieces():
         for match in matches:
             mark_matched_and_dim(match.x, match.y)
         get_node("DestroyTimer").start()
+        return
+
+    # check if there are pieces
+    var has_pieces = false
+    for column in width:
+        for row in height:
+            if all_pieces[column][row] != null:
+                has_pieces = true
+                break
+
+    if !has_pieces:
+        emit_signal("pieces_cleaned")
+
+
 
 func _on_destroy_timer_timeout() -> void:
     destroy_matches()
