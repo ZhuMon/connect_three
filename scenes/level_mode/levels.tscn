@@ -20,3 +20,5 @@ offset_right = 1120.0
 offset_bottom = 615.0
 text = "Menu
 "
+
+[connection signal="pressed" from="MenuButton" to="." method="_on_menu_button_pressed"]
