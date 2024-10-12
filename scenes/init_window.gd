@@ -13,5 +13,8 @@ func _process(delta: float) -> void:
 func _on_start_button_pressed() -> void:
     Global.goto_scene("levels", {})
 
+func _on_random_button_pressed() -> void:
+    Global.goto_scene("random", {})
+
 func _on_custom_button_pressed() -> void:
     Global.goto_scene("custom", {})

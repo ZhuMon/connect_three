@@ -1,0 +1,16 @@
+[gd_scene load_steps=2 format=3 uid="uid://bh0ffbm6lbhod"]
+
+[ext_resource type="Script" path="res://scenes/random_mode/random_window.gd" id="1_clppk"]
+
+[node name="RandomWindow" type="Node2D"]
+script = ExtResource("1_clppk")
+
+[node name="MenuButton" type="Button" parent="."]
+offset_left = 1024.0
+offset_top = 608.0
+offset_right = 1152.0
+offset_bottom = 639.0
+text = "Menu
+"
+
+[connection signal="pressed" from="MenuButton" to="." method="_on_menu_button_pressed"]

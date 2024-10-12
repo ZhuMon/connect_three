@@ -4,7 +4,8 @@ var scenes = {
     "levels": preload("res://scenes/level_mode/levels.tscn"),
     "custom": preload("res://scenes/custom_mode/custom_mode.tscn"),
     "level_window": preload("res://scenes/level_mode/level_window.tscn"),
-    "menu": preload("res://scenes/init_window.tscn")
+    "menu": preload("res://scenes/init_window.tscn"),
+    "random": preload("res://scenes/random_mode/random_window.tscn")
 }
 var current_scene = null
 
