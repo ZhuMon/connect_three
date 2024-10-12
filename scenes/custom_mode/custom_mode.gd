@@ -39,3 +39,6 @@ func _on_reset_button_pressed() -> void:
 
 func _on_menu_button_pressed() -> void:
     Global.goto_scene("menu", {})
+
+func _on_move_button_pressed(direction) -> void:
+    grid_scene_instance.move_grid(direction)
