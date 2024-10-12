@@ -19,7 +19,6 @@ func _ready() -> void:
         print("ModifyMode not found")
     
 
-
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
     pass

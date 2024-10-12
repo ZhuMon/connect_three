@@ -25,8 +25,8 @@ var not_matchable = ["Concrete", ""]
 var history_pieces = []
 
 # Record the chosen piece
-var first_choose = Vector2(0,0)
-var final_choose = Vector2(0,0)
+var first_choose = Vector2(0, 0)
+var final_choose = Vector2(0, 0)
 var controlling = false
 
 var is_started = false
@@ -85,6 +85,12 @@ func spawn_level_pieces(level_info: Array):
                 all_pieces[i][j] = new_piece
                 add_child(new_piece)
 
+func spawn_random_pieces():
+    var num = RandomConfig.color_count
+
+    print("spawn_random_pieces: num: ", num)
+
+    
 func grid_to_pixel(column, row):
     var new_x = x_start + offset * column;
     var new_y = y_start + -offset * row;
@@ -118,7 +124,7 @@ func touch_input():
 
 func swap_pieces(column, row, direction):
     var first_piece = all_pieces[column][row]
-    var other_piece = all_pieces[column + direction.x][row+direction.y]
+    var other_piece = all_pieces[column + direction.x][row + direction.y]
 
     if not is_instance_valid(first_piece) or not is_instance_valid(other_piece):
         return
@@ -222,7 +228,7 @@ func collapse_pieces():
     for column in width:
         for row in height:
             if all_pieces[column][row] == null:
-                for i in range(row+1, height):
+                for i in range(row + 1, height):
                     if all_pieces[column][i] != null:
                         all_pieces[column][row] = all_pieces[column][i]
                         all_pieces[column][i] = null
@@ -247,7 +253,6 @@ func collapse_pieces():
 
     if !has_pieces:
         emit_signal("pieces_cleaned")
-
 
 
 func _on_destroy_timer_timeout() -> void:
