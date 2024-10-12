@@ -137,7 +137,7 @@ func spawn_random_piece() -> bool:
     if retry >= 10:
         print("spawn_random_pieces: retry >= 10")
         return false
-    
+
     return true
 
 
@@ -441,3 +441,52 @@ func free_all_pieces():
         for row in height:
             if all_pieces[column][row] != null:
                 all_pieces[column][row].queue_free()
+
+func move_grid(direction: String):
+    # move the grid to the direction
+    if direction == "up":
+        for column in width:
+            # clean the top row
+            all_pieces[column][height - 1].queue_free()
+            for row in range(height - 2, -1, -1):
+                if all_pieces[column][row] != null:
+                    all_pieces[column][row].move(grid_to_pixel(column, row + 1))
+                    all_pieces[column][row + 1] = all_pieces[column][row]
+                    all_pieces[column][row] = null
+            # add empty piece to the bottom
+            all_pieces[column][0] = new_piece("Concrete", column, 0)
+    elif direction == "down":
+        for column in width:
+            # clean the bottom row
+            all_pieces[column][0].queue_free()
+            for row in range(1, height):
+                if all_pieces[column][row] != null:
+                    all_pieces[column][row].move(grid_to_pixel(column, row - 1))
+                    all_pieces[column][row - 1] = all_pieces[column][row]
+                    all_pieces[column][row] = null
+            # add empty piece to the top
+            all_pieces[column][height - 1] = new_piece("Concrete", column, height - 1)
+    elif direction == "left":
+        for row in height:
+            # clean the left column
+            all_pieces[0][row].queue_free()
+            for column in range(1, width):
+                if all_pieces[column][row] != null:
+                    all_pieces[column][row].move(grid_to_pixel(column - 1, row))
+                    all_pieces[column - 1][row] = all_pieces[column][row]
+                    all_pieces[column][row] = null
+            # add empty piece to the right
+            all_pieces[width - 1][row] = new_piece("Concrete", width - 1, row)
+    elif direction == "right":
+        for row in height:
+            # clean the right column
+            all_pieces[width - 1][row].queue_free()
+            for column in range(width - 2, -1, -1):
+                if all_pieces[column][row] != null:
+                    all_pieces[column][row].move(grid_to_pixel(column + 1, row))
+                    all_pieces[column + 1][row] = all_pieces[column][row]
+                    all_pieces[column][row] = null
+            # add empty piece to the left
+            all_pieces[0][row] = new_piece("Concrete", 0, row)
+    else:
+        print("error: direction not found: ", direction)

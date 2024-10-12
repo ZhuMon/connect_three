@@ -60,8 +60,40 @@ offset_bottom = 639.0
 text = "Menu
 "
 
+[node name="MoveUpButton" type="Button" parent="."]
+offset_left = 1040.0
+offset_top = 255.0
+offset_right = 1120.0
+offset_bottom = 286.0
+text = "UP"
+
+[node name="MoveDownButton" type="Button" parent="."]
+offset_left = 1040.0
+offset_top = 304.0
+offset_right = 1120.0
+offset_bottom = 335.0
+text = "DOWN"
+
+[node name="MoveLeftButton" type="Button" parent="."]
+offset_left = 1040.0
+offset_top = 352.0
+offset_right = 1120.0
+offset_bottom = 383.0
+text = "LEFT"
+
+[node name="MoveRightButton" type="Button" parent="."]
+offset_left = 1040.0
+offset_top = 400.0
+offset_right = 1120.0
+offset_bottom = 431.0
+text = "RIGHT"
+
 [connection signal="pressed" from="RestoreTemplateButton" to="." method="_on_restore_template_button_pressed"]
 [connection signal="pressed" from="SaveTemplateButton" to="." method="_on_save_template_button_pressed"]
 [connection signal="pressed" from="StartButton" to="." method="_on_start_button_pressed"]
 [connection signal="pressed" from="ResetButton" to="." method="_on_reset_button_pressed"]
 [connection signal="pressed" from="MenuButton" to="." method="_on_menu_button_pressed"]
+[connection signal="pressed" from="MoveUpButton" to="." method="_on_move_button_pressed" binds= ["up"]]
+[connection signal="pressed" from="MoveDownButton" to="." method="_on_move_button_pressed" binds= ["down"]]
+[connection signal="pressed" from="MoveLeftButton" to="." method="_on_move_button_pressed" binds= ["left"]]
+[connection signal="pressed" from="MoveRightButton" to="." method="_on_move_button_pressed" binds= ["right"]]
