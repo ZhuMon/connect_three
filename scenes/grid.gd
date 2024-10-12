@@ -18,7 +18,8 @@ var piece_images = {
     "Yellow": load("res://img/Match 3 Assets/Match 3 Assets/Pieces/Yellow Piece.png"),
     "Concrete": load("res://img/Match 3 Assets/Match 3 Assets/Obstacles/Concrete.png"),
 }
-var concrete_piece = preload("res://scenes/pieces/concrete_piece.tscn")
+var piece_scene = preload("res://scenes/pieces/piece.tscn")
+
 var all_pieces = []
 var saved_pieces = [] # initial map
 var not_matchable = ["Concrete", ""]
@@ -51,14 +52,23 @@ func make_2d_array():
             array[i].append(null)
     return array
 
+func new_piece(color: String, column: int, row: int):
+    if !color in piece_images:
+        push_error("color not in piece_images: " + color)
+        return
+
+    var piece = piece_scene.instantiate()
+    piece.position = grid_to_pixel(column, row)
+    piece.color = color
+    piece.get_node("Sprite2D").texture = piece_images[color]
+
+    add_child(piece)
+    return piece
+
 func spawn_all_concrete_pieces():
-    for i in width:
-        for j in height:
-            var empty_piece = concrete_piece.instantiate()
-            add_child(empty_piece);
-            empty_piece.position = grid_to_pixel(i, j)
-            empty_piece.color = "Concrete"
-            all_pieces[i][j] = empty_piece
+    for column in width:
+        for row in height:
+            all_pieces[column][row] = new_piece("Concrete", column, row)
 
 func spawn_level_pieces(level_info: Array):
     var level_width = level_info.size()
@@ -66,31 +76,89 @@ func spawn_level_pieces(level_info: Array):
     if level_width != width or level_height != height:
         print("level width or height not match")
         return
-    
-    for i in width:
-        for j in height:
-            var color = level_info[i][j]
+
+    for column in width:
+        for row in height:
+            var color = level_info[column][row]
             if color != "":
-                var new_piece = concrete_piece.instantiate()
-                new_piece.color = color
-                new_piece.position = grid_to_pixel(i, j)
-
-                var node = new_piece.get_node("Sprite2D")
-                if !color in piece_images:
-                    print("color not in piece_images: ", color)
-                    return
-
-                node.texture = piece_images[color]
-
-                all_pieces[i][j] = new_piece
-                add_child(new_piece)
+                all_pieces[column][row] = new_piece(color, column, row)
 
 func spawn_random_pieces():
+    spawn_random_piece()
+
+func spawn_random_piece() -> bool:
     var num = RandomConfig.color_count
 
     print("spawn_random_pieces: num: ", num)
 
+    # choose the color
+    var color = "Blue"
+
+    # choose one connect type
+    var connect_type = RandomConfig.get_random_connect_type()
+
+    print("spawn_random_pieces: connect_type: ", connect_type)
+
+    var retry = 0
+
+    while retry < 10:
+        # choose the first piece position
+        var first_pos = RandomConfig.get_first_piece_position(connect_type, width, height)
+        var can_move_up = true
+
+        # check whether the piece position is valid
+        if all_pieces[first_pos.x][height - 1] != null:
+            retry += 1
+            print("spawn_random_pieces: all_pieces[first_pos.x][height - 1] != null")
+            continue
+        for shape in connect_type["shape"]:
+            var pos = first_pos + shape
+            if all_pieces[pos.x][height - 1 - shape.y] != null:
+                can_move_up = false
+                break
+
+        if !can_move_up:
+            retry += 1
+            print("spawn_random_pieces: !can_move_up")
+            continue
+
+        # move up the column
+        move_up_column(first_pos)
+        all_pieces[first_pos.x][first_pos.y] = new_piece(color, first_pos.x, first_pos.y)
+
+        # move up other columns
+        for shape in connect_type["shape"]:
+            var pos = first_pos + shape
+            move_up_column(pos)
+            all_pieces[pos.x][pos.y] = new_piece(color, pos.x, pos.y)
+
+        break
+
+    if retry >= 10:
+        print("spawn_random_pieces: retry >= 10")
+        return false
     
+    return true
+
+
+func move_up_column(grid_pos: Vector2) -> bool:
+    # if the top piece is not null, return error
+    if all_pieces[grid_pos.x][height - 1] != null:
+        print("top piece is not null")
+        return false
+
+    for i in range(height - 2, grid_pos.y, -1):
+        if all_pieces[grid_pos.x][i] == null:
+            continue
+        assert(all_pieces[grid_pos.x][i + 1] == null)
+
+        all_pieces[grid_pos.x][i].move(grid_to_pixel(grid_pos.x, i + 1))
+        all_pieces[grid_pos.x][i + 1] = all_pieces[grid_pos.x][i]
+        all_pieces[grid_pos.x][i] = null
+
+    return true
+
+
 func grid_to_pixel(column, row):
     var new_x = x_start + offset * column;
     var new_y = y_start + -offset * row;
@@ -117,7 +185,7 @@ func touch_input():
         if is_in_grid(mouse_grid):
             final_choose = mouse_grid
             if !is_started and first_choose == final_choose:
-                change_color()
+                fill_color()
                 return
             touch_difference(first_choose, final_choose)
             controlling = false
@@ -163,7 +231,12 @@ func _on_chosen_color_changed(chosen_color: String) -> void:
     color_to_change = chosen_color
     print("_on_chosen_color_changed: color_to_change: ", color_to_change)
 
-func change_color():
+func change_color(piece: Node2D, color: String):
+    piece.color = color
+    var node = piece.get_node("Sprite2D")
+    node.texture = piece_images[color]
+
+func fill_color():
     if !controlling:
         return
 
@@ -181,10 +254,7 @@ func change_color():
             return
         color_to_change_this_time = "Concrete"
 
-    piece.color = color_to_change_this_time
-
-    var node = piece.get_node("Sprite2D")
-    node.texture = piece_images[color_to_change_this_time]
+    change_color(piece, color_to_change_this_time)
 
     print("change ", first_choose, " to color: ", color_to_change_this_time)
 
@@ -277,34 +347,34 @@ func rotate_90_clockwise(array):
     var rows = array.size()
     var cols = array[0].size()
     var rotated = []
-    
+
     for i in range(cols):
         rotated.append([])
-    
+
     for i in range(cols):
         for j in range(rows):
             if array[j][i] == "Concrete":
                 rotated[i].append("")
             else:
                 rotated[i].append(array[rows - 1 - j][i])
-    
+
     return rotated
 
 func rotate_90_counterclockwise(array):
     var rows = array.size()
     var cols = array[0].size()
     var rotated = []
-    
+
     for i in range(cols):
         rotated.append([])
-    
+
     for i in range(cols):
         for j in range(rows):
             if array[j][i] == "Concrete":
                 rotated[cols - 1 - i].append("")
             else:
                 rotated[cols - 1 - i].append(array[j][i])
-    
+
     return rotated
 
 func save_template():
@@ -341,7 +411,7 @@ func get_level_info_from_file(file_name: String):
         if row.size() == 1:
             continue
         level_info.append(row)
-        
+
     file.close()
 
     level_info = rotate_90_clockwise(level_info)
@@ -355,15 +425,7 @@ func restore_template():
         for row in height:
             var saved_color = saved_pieces[column][row]
             if saved_color != null:
-                var new_piece = concrete_piece.instantiate()
-                new_piece.color = saved_color
-                new_piece.position = grid_to_pixel(column, row)
-
-                var node = new_piece.get_node("Sprite2D")
-                node.texture = piece_images[saved_color]
-
-                all_pieces[column][row] = new_piece
-                add_child(new_piece)
+                all_pieces[column][row] = new_piece(saved_color, column, row)
 
     is_started = false
 
