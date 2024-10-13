@@ -196,7 +196,7 @@ func swap_pieces(column, row, direction):
 
     if not is_instance_valid(first_piece) or not is_instance_valid(other_piece):
         return
-    if first_piece.color in not_matchable or other_piece.color in not_matchable:
+    if is_started and (first_piece.color in not_matchable or other_piece.color in not_matchable):
         return
     if first_piece.color == other_piece.color:
         return
@@ -205,6 +205,9 @@ func swap_pieces(column, row, direction):
     all_pieces[column + direction.x][row + direction.y] = first_piece;
     first_piece.move(grid_to_pixel(column + direction.x, row + direction.y))
     other_piece.move(grid_to_pixel(column, row))
+
+    if !is_started:
+        return
 
     var matches = find_matches()
     if len(matches) == 0:
@@ -323,6 +326,7 @@ func collapse_pieces():
 
     if !has_pieces:
         emit_signal("pieces_cleaned")
+        is_started = false
 
 
 func _on_destroy_timer_timeout() -> void:
